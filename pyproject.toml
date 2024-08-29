@@ -1,0 +1,61 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "literotica-dl2"
+dynamic = ["version"]
+description = 'A tool to download stories from Literotica'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Shamoli Shah", email = "64245803+shamolishah@users.noreply.github.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = []
+
+[project.urls]
+Documentation = "https://github.com/ShamoliShah/literotica-dl2#readme"
+Issues = "https://github.com/ShamoliShah/literotica-dl2/issues"
+Source = "https://github.com/ShamoliShah/literotica-dl2"
+
+[tool.hatch.version]
+path = "src/literotica_dl2/__about__.py"
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/literotica_dl2 tests}"
+
+[tool.coverage.run]
+source_pkgs = ["literotica_dl2", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/literotica_dl2/__about__.py",
+]
+
+[tool.coverage.paths]
+literotica_dl2 = ["src/literotica_dl2", "*/literotica-dl2/src/literotica_dl2"]
+tests = ["tests", "*/literotica-dl2/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
