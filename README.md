@@ -1,4 +1,6 @@
 # literotica_dl2
+### Since [literotica_dl](https://github.com/fuzzyfiend/literotica_dl) is abandoned I have created this new version
+A tool to download stories from Literotica.
 
 [![PyPI - Version](https://img.shields.io/pypi/v/literotica-dl2.svg)](https://pypi.org/project/literotica-dl2)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/literotica-dl2.svg)](https://pypi.org/project/literotica-dl2)

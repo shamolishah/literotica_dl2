@@ -24,7 +24,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = []
+dependencies = ["beautifulsoup4", "requests"]
 
 [project.urls]
 Documentation = "https://github.com/ShamoliShah/literotica-dl2#readme"
