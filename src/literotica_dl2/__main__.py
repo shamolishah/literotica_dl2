@@ -5,13 +5,12 @@ from pathlib import Path
 from literotica_dl2.__about__ import __version__
 
 handler = logging.StreamHandler()
-handler.setFormatter(
-    logging.Formatter(style="{", fmt="[{name}:{filename}] {levelname} - {message}")
-)
+handler.setFormatter(logging.Formatter(style="{", fmt="[{name}:{filename}] {levelname} - {message}"))
 
 log = logging.getLogger("literotica_dl")
 log.setLevel(logging.INFO)
 log.addHandler(handler)
+
 
 def main():
     # Handle Arguments
@@ -35,11 +34,11 @@ def main():
 
     # argument checking
     if args.author is None and args.story is None:
-        msg="One of (-a / -s) flags must be specified"
+        msg = "One of (-a / -s) flags must be specified"
         log.error(msg)
         raise RuntimeError(msg)
 
-    Path(args.output).mkdir(exist_ok=True,parents=False)
+    Path(args.output).mkdir(exist_ok=True, parents=False)
 
 
 if __name__ == "__main__":
