@@ -31,6 +31,10 @@ Documentation = "https://github.com/ShamoliShah/literotica-dl2#readme"
 Issues = "https://github.com/ShamoliShah/literotica-dl2/issues"
 Source = "https://github.com/ShamoliShah/literotica-dl2"
 
+[project.scripts]
+literotica_dl2 = "literorica_dl2.__main__:main"
+
+
 [tool.hatch.version]
 path = "src/literotica_dl2/__about__.py"
 
