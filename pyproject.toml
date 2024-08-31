@@ -45,6 +45,14 @@ extra-dependencies = [
 [tool.hatch.envs.types.scripts]
 check = "mypy --install-types --non-interactive {args:src/literotica_dl2 tests}"
 
+[tool.hatch.envs.ipython]
+extra-dependencies = [
+  "ipython",
+]
+
+[tool.hatch.envs.ipython.scripts]
+ipython ="python -m ipython"
+
 [tool.coverage.run]
 source_pkgs = ["literotica_dl2", "tests"]
 branch = true

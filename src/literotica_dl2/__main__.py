@@ -3,6 +3,9 @@ import logging
 from pathlib import Path
 
 from literotica_dl2.__about__ import __version__
+from literotica_dl2.story import Story
+from literotica_dl2.utils import get_sane_filename
+
 
 handler = logging.StreamHandler()
 handler.setFormatter(logging.Formatter(style="{", fmt="[{name}:{filename}] {levelname} - {message}"))
@@ -39,6 +42,15 @@ def main():
         raise RuntimeError(msg)
 
     Path(args.output).mkdir(exist_ok=True, parents=False)
+
+    if args.story:
+        log.info("Trying to get %s", args.story)
+        story = Story(args.story)
+        dst_path = Path(args.output) / get_sane_filename(story.author)
+        dst_path.mkdir(exist_ok=True,parents=True)
+        story_path = (dst_path / get_sane_filename(story.title)).with_suffix(".txt")
+        story_path.write_text(story.text)
+
 
 
 if __name__ == "__main__":
