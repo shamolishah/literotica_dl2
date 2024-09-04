@@ -1,11 +1,14 @@
+from __future__ import annotations
+
 import argparse
 import logging
 from pathlib import Path
 
 from literotica_dl2.__about__ import __version__
+from literotica_dl2.author import Author
 from literotica_dl2.story import Story
+from literotica_dl2.story_series import StorySeries
 from literotica_dl2.utils import get_sane_filename
-
 
 handler = logging.StreamHandler()
 handler.setFormatter(logging.Formatter(style="{", fmt="[{name}:{filename}] {levelname} - {message}"))
@@ -13,6 +16,16 @@ handler.setFormatter(logging.Formatter(style="{", fmt="[{name}:{filename}] {leve
 log = logging.getLogger("literotica_dl")
 log.setLevel(logging.INFO)
 log.addHandler(handler)
+
+
+def save_story(base_folder: str, story: Story, extra_folder: str | None) -> None:
+    if extra_folder is not None:
+        dst_path = Path(base_folder) / get_sane_filename(story.author) / get_sane_filename(extra_folder)
+    else:
+        dst_path = Path(base_folder) / get_sane_filename(story.author)
+    dst_path.mkdir(exist_ok=True, parents=True)
+    story_path = (dst_path / get_sane_filename(story.title)).with_suffix(".txt")
+    story_path.write_text(story.text)
 
 
 def main():
@@ -46,11 +59,19 @@ def main():
     if args.story:
         log.info("Trying to get %s", args.story)
         story = Story(args.story)
-        dst_path = Path(args.output) / get_sane_filename(story.author)
-        dst_path.mkdir(exist_ok=True,parents=True)
-        story_path = (dst_path / get_sane_filename(story.title)).with_suffix(".txt")
-        story_path.write_text(story.text)
+        save_story(args.output, story)
 
+    if args.author:
+        log.info("Trying to get the author: %s", args.author)
+        author = Author(args.author)
+        for story_stub in author.individual_stories:
+            story = Story(story_stub)
+            save_story(args.output, story, extra_folder="Individual Stories")
+        for series_stub in author.series:
+            series = StorySeries(series_stub)
+            for chapter_stub in series.stories:
+                chapter = Story(chapter_stub)
+                save_story(args.output, chapter, extra_folder=series.title)
 
 
 if __name__ == "__main__":

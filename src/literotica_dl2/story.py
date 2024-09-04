@@ -26,7 +26,7 @@ class Story:
         log.info("Getting the initial page for %s", self.story_id)
 
         page = get_url_from_literotica(self.url)
-        self.first_page = BeautifulSoup(page, features="html.parser")
+        self.first_page = BeautifulSoup(page, features="html5lib")
 
         self._title = self.first_page.find("title").getText()
         self._title = html.unescape(self._title)
@@ -92,7 +92,7 @@ class Story:
         if self._pages > 1:
             for pg_no in range(2, self._pages + 1):
                 page_url = f"{self.url}?page={pg_no}"
-                page_soups.append(BeautifulSoup(get_url_from_literotica(page_url), features="html.parser"))
+                page_soups.append(BeautifulSoup(get_url_from_literotica(page_url), features="html5lib"))
         pages = [x.find("div", class_="aa_ht").getText("\n\n") for x in page_soups]
 
         self._text = "\n".join([str(x) for x in pages])

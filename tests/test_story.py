@@ -7,4 +7,4 @@ def test_metadata(story: Story):
     assert story.category == "Group Sex"
     assert story.description == "E-Beth from 'The Book of David' searches for happiness."
     assert story.pages == 7
-    assert story.text[:10] == "****The fo"
+    assert story.text[:10] == "****\n\nThe "
