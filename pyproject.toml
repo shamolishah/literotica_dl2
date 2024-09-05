@@ -24,7 +24,14 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = ["beautifulsoup4", "requests","fake-useragent","html5lib","requests-cache"]
+dependencies = [
+  "beautifulsoup4",
+  "requests",
+  "fake-useragent",
+  "html5lib",
+  "requests-cache",
+  "typer",
+]
 
 [project.urls]
 Documentation = "https://github.com/ShamoliShah/literotica-dl2#readme"
@@ -32,42 +39,32 @@ Issues = "https://github.com/ShamoliShah/literotica-dl2/issues"
 Source = "https://github.com/ShamoliShah/literotica-dl2"
 
 [project.scripts]
-literotica_dl2 = "literorica_dl2.__main__:main"
+literotica_dl2 = "literotica_dl2.cli:app"
 
 
 [tool.hatch.version]
 path = "src/literotica_dl2/__about__.py"
 
 [tool.hatch.envs.types]
-extra-dependencies = [
-  "mypy>=1.0.0",
-]
+extra-dependencies = ["mypy>=1.0.0"]
 [tool.hatch.envs.types.scripts]
 check = "mypy --install-types --non-interactive {args:src/literotica_dl2 tests}"
 
 [tool.hatch.envs.ipython]
-extra-dependencies = [
-  "ipython",
-]
+extra-dependencies = ["ipython"]
 
 [tool.hatch.envs.ipython.scripts]
-ipython ="python -m ipython"
+ipython = "python -m ipython"
 
 [tool.coverage.run]
 source_pkgs = ["literotica_dl2", "tests"]
 branch = true
 parallel = true
-omit = [
-  "src/literotica_dl2/__about__.py",
-]
+omit = ["src/literotica_dl2/__about__.py"]
 
 [tool.coverage.paths]
 literotica_dl2 = ["src/literotica_dl2", "*/literotica-dl2/src/literotica_dl2"]
 tests = ["tests", "*/literotica-dl2/tests"]
 
 [tool.coverage.report]
-exclude_lines = [
-  "no cov",
-  "if __name__ == .__main__.:",
-  "if TYPE_CHECKING:",
-]
+exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
