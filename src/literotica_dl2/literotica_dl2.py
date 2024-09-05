@@ -35,18 +35,18 @@ def story(story_slug: str, output: str = "output", output_format: OutputFormat =
 
 
 @app.command()
-def author(author_slug: str, output: str = "output") -> None:
+def author(author_slug: str, output: str = "output", output_format: OutputFormat = "txt") -> None:
     log.info("Trying to get the author: %s", author_slug)
     Path(output).mkdir(exist_ok=True, parents=False)
     author = Author(author_slug)
     for story_stub in author.individual_stories:
         story = Story(story_stub)
-        save_story(output, story, extra_folder="Individual Stories")
+        save_story(output, story, extra_folder="Individual Stories", output_format=output_format)
     for series_stub in author.series:
         series = StorySeries(series_stub)
         for chapter_stub in series.stories:
             chapter = Story(chapter_stub)
-            save_story(output, chapter, extra_folder=series.title)
+            save_story(output, chapter, extra_folder=series.title, output_format=output_format)
 
 
 if __name__ == "__main__":

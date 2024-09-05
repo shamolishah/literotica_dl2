@@ -31,6 +31,7 @@ dependencies = [
   "html5lib",
   "requests-cache",
   "typer",
+  "markdownify",
 ]
 
 [project.urls]

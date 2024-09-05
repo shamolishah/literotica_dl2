@@ -51,9 +51,11 @@ def save_story(base_folder: str, story, extra_folder: str | None = None, output_
     if output_format == OutputFormat.txt:
         story_path = (dst_path / get_sane_filename(story.title)).with_suffix(".txt")
         story_path.write_text(story.text)
+    elif output_format == OutputFormat.Markdown:
+        story_path = (dst_path / get_sane_filename(story.title)).with_suffix(".md")
+        story_path.write_text(story.markdown)
 
 
 class OutputFormat(Enum):
     txt = "txt"
     Markdown = "md"
-    HTML = "html"

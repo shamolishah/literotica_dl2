@@ -2,10 +2,16 @@ import html
 import logging
 
 from bs4 import BeautifulSoup
+from markdownify import MarkdownConverter
 
 from literotica_dl2.utils import get_url_from_literotica
 
 log = logging.getLogger("literotica_dl.Story")
+
+
+# Create shorthand method for conversion
+def md(soup, **options):
+    return MarkdownConverter(**options).convert_soup(soup)
 
 
 class Story:
@@ -19,6 +25,7 @@ class Story:
         self._pages: int = None
         self._text = None
         self._title = None
+        self._md = None
 
     def _fetch_and_parse(self) -> None:
         if self.first_page is not None:
@@ -93,9 +100,11 @@ class Story:
             for pg_no in range(2, self._pages + 1):
                 page_url = f"{self.url}?page={pg_no}"
                 page_soups.append(BeautifulSoup(get_url_from_literotica(page_url), features="html5lib"))
-        pages = [x.find("div", class_="aa_ht").getText("\n\n") for x in page_soups]
+        story_soups = [x.find("div", class_="aa_ht") for x in page_soups]
+        pages = [x.getText("\n\n") for x in story_soups]
 
         self._text = "\n".join([str(x) for x in pages])
+        self._md = "\n".join([md(x) for x in story_soups])
 
     @property
     def text(self) -> str:
@@ -103,3 +112,10 @@ class Story:
         if self._text is None:
             self.populate_full_story()
         return self._text
+
+    @property
+    def markdown(self) -> str:
+        """The full story in markdown"""
+        if self._md is None:
+            self.populate_full_story()
+        return self._md
