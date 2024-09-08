@@ -18,7 +18,7 @@ def get_sane_filename(title: str) -> str:
 
 
 def get_url_from_literotica(url: str) -> bytes:
-    session = requests_cache.CachedSession("literotica_cache.sqlite", expire_after=timedelta(hours=1))
+    session = requests_cache.CachedSession(".literotica_cache.sqlite", expire_after=timedelta(hours=1))
 
     ua = UserAgent().chrome
     header = {"User-Agent": ua}
@@ -37,23 +37,23 @@ def parse_story_url(url: str) -> str:
     return series_url_matcher.match(url).groups()[0]
 
 
-def save_story_pre(base_folder: str, story, extra_folder: str | None) -> Path:
+def save_work_pre(base_folder: str, work, extra_folder: str | None) -> Path:
     if extra_folder is not None:
-        dst_path = Path(base_folder) / get_sane_filename(story.author) / get_sane_filename(extra_folder)
+        dst_path = Path(base_folder) / get_sane_filename(work.author) / get_sane_filename(extra_folder)
     else:
-        dst_path = Path(base_folder) / get_sane_filename(story.author)
+        dst_path = Path(base_folder) / get_sane_filename(work.author)
     dst_path.mkdir(exist_ok=True, parents=True)
     return dst_path
 
 
-def save_story(base_folder: str, story, extra_folder: str | None = None, output_format: OutputFormat = "txt") -> None:
-    dst_path = save_story_pre(base_folder=base_folder, story=story, extra_folder=extra_folder)
+def save_work(base_folder: str, work, extra_folder: str | None = None, output_format: OutputFormat = "txt") -> None:
+    dst_path = save_work_pre(base_folder=base_folder, work=work, extra_folder=extra_folder)
     if output_format == OutputFormat.txt:
-        story_path = (dst_path / get_sane_filename(story.title)).with_suffix(".txt")
-        story_path.write_text(story.text)
+        work_path = (dst_path / get_sane_filename(work.title)).with_suffix(".txt")
+        work_path.write_text(work.text)
     elif output_format == OutputFormat.Markdown:
-        story_path = (dst_path / get_sane_filename(story.title)).with_suffix(".md")
-        story_path.write_text(story.markdown)
+        work_path = (dst_path / get_sane_filename(work.title)).with_suffix(".md")
+        work_path.write_text(work.markdown)
 
 
 class OutputFormat(Enum):
