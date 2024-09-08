@@ -33,6 +33,8 @@ class Author:
             x["href"].replace("https://www.literotica.com/p/", "")
             for x in self.poems_page.find_all("a", class_="_item_title_14spp_173")
         ]
+        if self._poems is None:
+            self._poems = []
 
     def _fetch_and_parse(self) -> None:
         if self.stories_page is not None:
@@ -54,6 +56,10 @@ class Author:
                 continue
             log.info("Individual Title: %s", work.getText()[:100])
             self._individual_works.append(parse_story_url(work.find("a")["href"]))
+        if self._series is None:
+            self._series = []
+        if self._individual_works is None:
+            self._individual_works = []
 
     @property
     def author_name(self) -> str:
