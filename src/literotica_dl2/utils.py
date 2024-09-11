@@ -19,12 +19,14 @@ def get_sane_filename(title: str) -> str:
 
 def get_url_from_literotica(url: str) -> bytes:
     session = requests_cache.CachedSession(".literotica_cache.sqlite", expire_after=timedelta(hours=1))
-
     ua = UserAgent().chrome
     header = {"User-Agent": ua}
     log.info("Fetching From Literotica: %s", url)
     page = session.get(url, headers=header, timeout=10)
-    return page.content
+    if page.url == url:
+        return page.content
+
+    return ""
 
 
 def parse_story_series(url: str) -> str:

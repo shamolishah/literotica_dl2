@@ -82,5 +82,5 @@ class Author:
     @property
     def poems(self) -> list[str | None]:
         if self._poems is None:
-            self._fetch_and_parse()
+            self._fetch_and_parse_alternates()
         return self._poems
