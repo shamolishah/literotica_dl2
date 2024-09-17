@@ -2,14 +2,13 @@ from __future__ import annotations
 
 import logging
 import re
-from datetime import timedelta
 from enum import Enum
 from pathlib import Path
 
 import requests_cache
 from fake_useragent import UserAgent
 
-log = logging.getLogger("literotica_dl.downloader_utils")
+log = logging.getLogger("literotica_dl")
 
 
 def get_sane_filename(title: str) -> str:
@@ -18,14 +17,18 @@ def get_sane_filename(title: str) -> str:
 
 
 def get_url_from_literotica(url: str) -> bytes:
-    session = requests_cache.CachedSession(".literotica_cache.sqlite", expire_after=timedelta(hours=1))
+    session = requests_cache.CachedSession(".literotica_cache.sqlite")
     ua = UserAgent().chrome
     header = {"User-Agent": ua}
     log.info("Fetching From Literotica: %s", url)
     page = session.get(url, headers=header, timeout=10)
+    log.info("Got From Liteortica: %s", page.url)
     if page.url == url:
         return page.content
-
+    if parse_story_url(url) == parse_story_url(page.url) and parse_story_url(page.url) is not None:
+        log.warning("Returned URL is different but same Story")
+        return page.content
+    log.warning("Returned page does not match from literotica skipping")
     return ""
 
 
@@ -35,8 +38,11 @@ def parse_story_series(url: str) -> str:
 
 
 def parse_story_url(url: str) -> str:
-    series_url_matcher = re.compile(r".+\/s\/(.+)")
-    return series_url_matcher.match(url).groups()[0]
+    try:
+        series_url_matcher = re.compile(r".+\/s\/(.+)")
+        return series_url_matcher.match(url).groups()[0]
+    except AttributeError:
+        return None
 
 
 def save_work_pre(base_folder: str, work, extra_folder: str | None) -> Path:
